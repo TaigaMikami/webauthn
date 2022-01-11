@@ -1,7 +1,6 @@
-import type { COSEAlgorithmIdentifier } from "../types/dom";
 import base64url from "base64url";
-import type { AuthenticatorSelectionCriteria, GenerateRegistrationOptionsOpts, PublicKeyCredentialParameters } from "../types";
 import generateChallenge from "../helpers/generateChallenge";
+import type { GenerateRegistrationOptionsOpts, PublicKeyCredentialCreationOptionsJSON } from "types";
 
 export const supportedCOSEAlgorithmIdentifiers: COSEAlgorithmIdentifier[] = [
   // ECDSA w/ SHA-256
@@ -35,10 +34,12 @@ const defaultAuthenticatorSelection: AuthenticatorSelectionCriteria = {
 
 export default function generateRegistrationOptions(
   options: GenerateRegistrationOptionsOpts
-) {
+): PublicKeyCredentialCreationOptionsJSON {
   const {
     rpID,
+    rpName,
     userID,
+    userName,
     userDisplayName,
     challenge = generateChallenge(),
     timeout = 60000,
@@ -62,10 +63,12 @@ export default function generateRegistrationOptions(
 
   return {
     rp: {
-      id: rpID
+      id: rpID,
+      name: rpName
     },
     user: {
       id: userID,
+      name: userName,
       displayName: userDisplayName
     },
     challenge: base64url.encode(challenge),

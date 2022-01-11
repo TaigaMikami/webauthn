@@ -3,14 +3,18 @@ jest.mock("../helpers/generateChallenge");
 
 test ("generate credential request optios suitable for sending", () => {
   const rpID = "webauthn.example";
+  const rpName = "WebAuthnExample"
   const userID = "123456789";
-  const userDisplayName = "TaigaMikami";
+  const userName = "TaigaMikami"
+  const userDisplayName = "taimikam";
   const timeout = 1;
   const attestationType = "indirect";
 
   const options = generateRegistrationOptions({
     rpID,
+    rpName,
     userID,
+    userName,
     userDisplayName,
     challenge: "randomrandomrandome",
     timeout,
@@ -19,10 +23,12 @@ test ("generate credential request optios suitable for sending", () => {
 
   expect(options).toEqual({
     rp: {
-      id: rpID
+      id: rpID,
+      name: rpName
     },
     user: {
       id: userID,
+      name: userName,
       displayName: userDisplayName
     },
     challenge: "cmFuZG9tcmFuZG9tcmFuZG9tZQ",
@@ -49,8 +55,10 @@ test ("generate credential request optios suitable for sending", () => {
 
 test('should generate a challenge if one is not provided', () => {
   const options = generateRegistrationOptions({
-    rpID: 'not.real',
-    userID: '1234'
+    rpID: 'webauthn.example',
+    rpName: 'WebAuthnExample',
+    userID: '1234',
+    userName: "TaigaMikami"
   });
 
   // base64url-encoded 16-byte buffer from mocked `generateChallenge()`

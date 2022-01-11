@@ -1,8 +1,8 @@
-import { AttestationConveyancePreference, PublicKeyCredentialType, COSEAlgorithmIdentifier, AuthenticatorAttachment, ResidentKeyRequirement, UserVerificationRequirement, AuthenticationExtensionsClientInputs, PublicKeyCredentialDescriptor } from "./dom";
-
 export type GenerateRegistrationOptionsOpts = {
   rpID: string;
+  rpName: string;
   userID: string;
+  userName: string;
   userDisplayName?: string;
   challenge?: string | Buffer;
   timeout?: number;
@@ -12,14 +12,20 @@ export type GenerateRegistrationOptionsOpts = {
   extensions?: AuthenticationExtensionsClientInputs
 };
 
-export interface PublicKeyCredentialParameters {
-  type: PublicKeyCredentialType;
-  alg: COSEAlgorithmIdentifier;
+export interface PublicKeyCredentialCreationOptionsJSON extends Omit<PublicKeyCredentialCreationOptions, 'challenge' | 'user' | 'excludeCredentials'> {
+  user: PublicKeyCredentialUserEntityJSON;
+  challenge: Base64URLString;
+  excludeCredentials?: PublicKeyCredentialDescriptorJSON[];
+  extensions?: AuthenticationExtensionsClientInputs
 }
 
-export interface AuthenticatorSelectionCriteria {
-  residentKey?: ResidentKeyRequirement;
-  authenticatorAttachment?: AuthenticatorAttachment;
-  requireResidentKey?: boolean;
-  userVerification?: UserVerificationRequirement;
+export interface PublicKeyCredentialUserEntityJSON extends Omit<PublicKeyCredentialUserEntity, 'id'> {
+  id: string;
 }
+
+export declare type Base64URLString = string;
+
+export interface PublicKeyCredentialDescriptorJSON extends Omit<PublicKeyCredentialDescriptor, 'id'> {
+  id: Base64URLString;
+}
+
